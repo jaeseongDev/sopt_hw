@@ -152,7 +152,6 @@ router.get('/:id', async (req, res) => {
             res.status(409).json(utils(statusCode.NOT_FOUND, resMessage.NOT_EXISTING_ID));
         } else {
             res.status(200).json(utils(statusCode.OK, resMessage.READ_POST));
-            res.send({"OK": "하하하"});
         }
         
 
