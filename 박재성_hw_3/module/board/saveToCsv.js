@@ -16,7 +16,7 @@ saveToCsv = async (data) => {
                 throw new Error("fs.writeFile에서 에러 발생");
             }
         })
-        console.log("데이터를 csv에 성공적으로 추가했습니다.");
+        console.log("데이터를 csv에 성공적으로 반영했습니다.");
     } catch (err) {
         // 이 코드를 넣으면 작동이 안 된다.
         // 그러면 어떻게 응답코드와 응답 메시지를 보낼 수 있지?

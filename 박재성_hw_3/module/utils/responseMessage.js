@@ -8,7 +8,8 @@ module.exports = {
     // 실패
     EXISTING_TITLE : "같은 제목의 글이 이미 존재",
     INTERNAL_SERVER_ERROR : "내부 서버 에러 (서버 개발자한테 문의하세요^^)",
-    WRONG_PASSWORD : "비밀번호가 맞지 않습니다."
+    WRONG_PASSWORD : "비밀번호가 맞지 않습니다.",
+    NOT_EXISTING_ID : "일치하는 ID의 게시글이 없습니다."
 
 
     // NULL_VALUE: "필요한 값이 없습니다",
