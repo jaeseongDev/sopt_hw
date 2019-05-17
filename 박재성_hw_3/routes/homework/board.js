@@ -130,7 +130,7 @@ router.delete('/', async (req, res) => {
         } else {
             await saveToCsv(jsonArray);
             console.log("데이터를 성공적으로 삭제했습니다");
-            res.status(204).json(utils(statusCode.NO_CONTENT, resMessage.DELETED_POST));
+            res.status(200).json(utils(statusCode.NO_CONTENT, resMessage.DELETED_POST));
         }
     } catch (err) {
         console.log(err);
@@ -151,7 +151,9 @@ router.get('/:id', async (req, res) => {
             console.log("일치하는 아이디의 게시글이 없습니다.");
             res.status(409).json(utils(statusCode.NOT_FOUND, resMessage.NOT_EXISTING_ID));
         } else {
+            console.log("작동이 되는지");
             res.status(200).json(utils(statusCode.OK, resMessage.READ_POST));
+            console.log("작동이 되는지 알아보자");
         }
         
 
