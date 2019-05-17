@@ -9,7 +9,6 @@ var router = express.Router();
 
 // MySQL 데이터베이스 Pooling
 const pool = require('../../config/dbConfig');
-var connection = await pool.getConnection();
 
 router.post('/', async(req, res) => {
     try {
@@ -21,6 +20,7 @@ router.post('/', async(req, res) => {
         password = await cryptoPassword.hashedPassword(password, salt);
 
         // 데이터베이스 연결
+        var connection = await pool.getConnection();
         await connection.beginTransaction(); // 트랜젝션 시작
 
         // 저장 시 같은 아이디가 있는지 확인하기
@@ -44,6 +44,7 @@ router.post('/', async(req, res) => {
         connection.rollback(() => {
             console.log(err);
         });
+        res.status(200).send(utils(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
     } 
     finally {
         connection.release();
