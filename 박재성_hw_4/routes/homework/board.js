@@ -33,8 +33,8 @@ router.post('/', async(req, res) => {
     } catch (err) {
         connection.rollback(() => {
             console.log(err);
+            res.status(200).send(utils(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
         });
-        res.status(200).send(utils(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
     } finally {
         connection.release();
     }
@@ -55,8 +55,9 @@ router.get('/', async(req, res) => {
     } catch (err) {
         connection.rollback(() => {
             console.log(err);
+            res.status(200).send(utils(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
         });
-        res.status(200).send(utils(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
+        
     } finally {
         connection.release();
     }
