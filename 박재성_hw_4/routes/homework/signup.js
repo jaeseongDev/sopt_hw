@@ -44,9 +44,9 @@ router.post('/', async(req, res) => {
         connection.rollback(() => {
             console.log(err);
         });
-    } finally {
-        // connection.release();
-        pool.releaseConnection(connection);
+    } 
+    finally {
+        connection.release();
     }
 });
 module.exports = router;
