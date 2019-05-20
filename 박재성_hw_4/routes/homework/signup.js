@@ -35,16 +35,16 @@ router.post('/', async(req, res) => {
             userValue = [id, name, password, salt];
             await connection.query(userInsertQuery, userValue);
             await connection.commit();
-            res.status(200).send(utils(statusCode.CREATED, resMessage.CREATED_USER));        
+            res.status(200).send(utils.successTrue(statusCode.CREATED, resMessage.CREATED_USER));        
         } else {
         // 같은 아이디가 있을 경우에 실패메시지 반환하기
-            res.status(200).send(utils(statusCode.CONFLICT, resMessage.EXISTING_ID));
+            res.status(200).send(utils.successFalse(statusCode.CONFLICT, resMessage.EXISTING_ID));
             console.log('같은 아이디 존재');
         }
     } catch (err) {
         connection.rollback(() => {
             console.log(err);
-            res.status(200).send(utils(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
+            res.status(200).send(utils.successFalse(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
         });
         
     } 

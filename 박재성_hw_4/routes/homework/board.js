@@ -29,11 +29,11 @@ router.post('/', async(req, res) => {
         userValue = [writer, title, content, writetime, boardPw, salt];
         await connection.query(userInsertQuery, userValue);
         await connection.commit();
-        res.status(200).send(utils(statusCode.CREATED, resMessage.CREATED_POST));        
+        res.status(200).send(utils.successTrue(statusCode.CREATED, resMessage.CREATED_POST));        
     } catch (err) {
         connection.rollback(() => {
             console.log(err);
-            res.status(200).send(utils(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
+            res.status(200).send(utils.successFalse(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
         });
     } finally {
         connection.release();
@@ -48,15 +48,15 @@ router.get('/', async(req, res) => {
 
         // 저장된 전체 게시물 불러오기
         // let readAllBoard = 'SELECT * FROM board';
-        let readAllBoard = 'SELECT * FROM board INNER JOIN user ON board.writer = user.userIdx';
+        let readAllBoard = 'SELECT boardIdx, title, content, writer, writetime, userIdx, id, name FROM board INNER JOIN user ON board.writer = user.userIdx';
         let results = await connection.query(readAllBoard);
         console.log(results);
         await connection.commit();
-        res.status(200).send(utils(statusCode.OK, resMessage.READ_POST, results));        
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.READ_POST, results));        
     } catch (err) {
         connection.rollback(() => {
             console.log(err);
-            res.status(200).send(utils(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
+            res.status(200).send(utils.successFalse(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
         });
         
     } finally {
@@ -83,18 +83,18 @@ router.delete('/', async(req, res) => {
                 let deleteBoard = 'DELETE FROM board WHERE boardIdx = ?';
                 await connection.query(deleteBoard, [boardIdx]);
                 await connection.commit();
-                res.status(200).send(utils(statusCode.OK, resMessage.DELETED_POST)); 
+                res.status(200).send(utils.successTrue(statusCode.OK, resMessage.DELETED_POST)); 
             } else {
-                res.status(200).send(utils(statusCode.OK, resMessage.WRONG_PASSWORD));    
+                res.status(200).send(utils.successTrue(statusCode.OK, resMessage.WRONG_PASSWORD));    
             }
         } else {
-            res.status(200).send(utils(statusCode.NOT_FOUND, resMessage.NOT_EXISTING_ID));
+            res.status(200).send(utils.successFalse(statusCode.NOT_FOUND, resMessage.NOT_EXISTING_ID));
         }
     } catch (err) {
         connection.rollback(() => {
             console.log(err);
         });
-        res.status(200).send(utils(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
+        res.status(200).send(utils.successFalse(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
     } finally {
         connection.release();
     }
@@ -110,16 +110,16 @@ router.get('/:idx', async(req, res) => {
         await connection.beginTransaction(); // 트랜젝션 시작
 
         // 저장된 특정 게시물 불러오기
-        let readBoard = 'SELECT * FROM board WHERE boardIdx = ?';
+        let readBoard = 'SELECT boardIdx, title, content, writer, writetime FROM board WHERE boardIdx = ?';
         let results = await connection.query(readBoard, [idx]);
         console.log(results);
         await connection.commit();
-        res.status(200).send(utils(statusCode.OK, resMessage.READ_POST, results));        
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.READ_POST, results));        
     } catch (err) {
         connection.rollback(() => {
             console.log(err);
         });
-        res.status(200).send(utils(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
+        res.status(200).send(utils.successFalse(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
     } finally {
         connection.release();
     }

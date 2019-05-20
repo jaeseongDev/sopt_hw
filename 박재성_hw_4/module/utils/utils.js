@@ -1,9 +1,20 @@
-const utils = (status, message, data) => {
-    return {
-        status: status,
-        message: message,
-        data: data
-    }
-}
+const authUtil = {
+    successTrue: (status, message, data) => {
+        return {
+            status: status,
+            success: true,
+            message: message,
+            data: data
+        }
+    },
+    successFalse: (status, message) => {
 
-module.exports = utils;
+        return {
+            status: status,
+            success: false,
+            message: message
+        }
+    }
+};
+
+module.exports = authUtil;

@@ -13,7 +13,7 @@ module.exports = {
     WRONG_PASSWORD : "비밀번호가 맞지 않습니다.",
     NOT_EXISTING_ID : "일치하는 ID의 게시글이 없습니다.",
     EXISTING_ID : "같은 아이디가 이미 존재",
-    LOGIN_FAIL: "로그인 실패",
+    LOGIN_FAIL: "ID나 PW가 일치하지 않습니다.",
 
 
     // NULL_VALUE: "필요한 값이 없습니다",
