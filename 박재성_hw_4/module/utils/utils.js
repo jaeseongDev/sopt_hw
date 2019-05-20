@@ -1,7 +1,8 @@
-const utils = (status, message) => {
+const utils = (status, message, data) => {
     return {
         status: status,
         message: message,
+        data: data
     }
 }
 

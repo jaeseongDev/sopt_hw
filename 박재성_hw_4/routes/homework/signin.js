@@ -28,7 +28,7 @@ router.post('/', async(req, res) => {
             if (inputPassword == results[0].password) {
                 res.status(200).send(utils(statusCode.OK, resMessage.LOGIN_SUCCESS));
             } else {
-                res.status(200).send(utils(statusCode.OK, resMessage.LOGIN_FAIL));    
+                res.status(200).send(utils(statusCode.OK, resMessage.LOGIN_FAIL));
             }
         } else {
             res.status(200).send(utils(statusCode.OK, resMessage.LOGIN_FAIL));

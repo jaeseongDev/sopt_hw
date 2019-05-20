@@ -17,6 +17,7 @@ router.post('/', async(req, res) => {
         
         // 패스워드 암호화 하기
         let salt = await cryptoPassword.salt();
+        
         password = await cryptoPassword.hashedPassword(password, salt);
 
         // 데이터베이스 연결

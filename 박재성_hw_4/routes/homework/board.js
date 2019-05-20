@@ -47,11 +47,12 @@ router.get('/', async(req, res) => {
         await connection.beginTransaction(); // 트랜젝션 시작
 
         // 저장된 전체 게시물 불러오기
-        let readAllBoard = 'SELECT * FROM board';
+        // let readAllBoard = 'SELECT * FROM board';
+        let readAllBoard = 'SELECT * FROM board INNER JOIN user ON board.writer = user.userIdx';
         let results = await connection.query(readAllBoard);
         console.log(results);
         await connection.commit();
-        res.status(200).send(utils(statusCode.OK, resMessage.READ_POST));        
+        res.status(200).send(utils(statusCode.OK, resMessage.READ_POST, results));        
     } catch (err) {
         connection.rollback(() => {
             console.log(err);
@@ -103,6 +104,7 @@ router.get('/:idx', async(req, res) => {
     try {
         const { idx } = req.params;
 
+
         // 데이터베이스 연결
         var connection = await pool.getConnection();
         await connection.beginTransaction(); // 트랜젝션 시작
@@ -112,7 +114,7 @@ router.get('/:idx', async(req, res) => {
         let results = await connection.query(readBoard, [idx]);
         console.log(results);
         await connection.commit();
-        res.status(200).send(utils(statusCode.OK, resMessage.READ_POST));        
+        res.status(200).send(utils(statusCode.OK, resMessage.READ_POST, results));        
     } catch (err) {
         connection.rollback(() => {
             console.log(err);
@@ -125,4 +127,3 @@ router.get('/:idx', async(req, res) => {
 
 
 module.exports = router;
-
