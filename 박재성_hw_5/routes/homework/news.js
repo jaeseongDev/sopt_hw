@@ -29,12 +29,9 @@ router.get('/', async(req, res) => {
         // 쿼리문 실행
         query = 'SELECT newsIdx, userName, title, thumbnail, saveTime FROM news ORDER BY saveTime DESC';
         data = await connection.query(query);
-        console.log(data.length);
-        console.log(data);
         for (let i = 0; i < data.length; i++) {
             data[i].saveTime = moment(data[i].saveTime).format('YYYY-MM-DD HH:mm:ss');
         }
-        console.log(data);
 
         // 커밋
         await connection.commit();
@@ -119,6 +116,9 @@ router.get('/:idx', async(req, res) => {
         // 쿼리문 실행
         query = 'SELECT title, content, image, saveTime FROM news INNER JOIN newsInfo ON news.newsIdx = newsInfo.news_FK WHERE newsIdx = ?';
         data = await connection.query(query, req.params.idx);
+        for (let i = 0; i < data.length; i++) {
+            data[i].saveTime = moment(data[i].saveTime).format('YYYY-MM-DD HH:mm:ss');
+        }
         
         // 커밋
         await connection.commit();
