@@ -59,6 +59,7 @@ router.post('/', upload.array('images'), async(req, res) => {
         let image;
         let query;
         let results;
+        console.log(req.body);
 
         // 이미지 파일이 2개 이상 존재할 때
         if (images.length >= 2) {
@@ -71,7 +72,8 @@ router.post('/', upload.array('images'), async(req, res) => {
             query = 'INSERT INTO news (userName, title, thumbnail, saveTime) VALUES (?, ?, ?, ?)'
             results = await connection.query(query, [userName, title, thumbnail, saveTime]);
             let news_FK = results.insertId;
-
+            
+            
             query = 'INSERT INTO newsInfo (content, news_FK, image) VALUES (?, ?, ?)';
             for (let i = 1; i < images.length; i++) {
                 image = images[i].location;
@@ -108,7 +110,7 @@ router.get('/:idx', async(req, res) => {
         await connection.beginTransaction(); // 트랜젝션 시작
 
         // 쿼리문 실행
-        query = 'SELECT title, content, thumbnail, saveTime FROM news INNER JOIN newsInfo ON news.newsIdx = newsInfo.news_FK WHERE newsIdx = ?';
+        query = 'SELECT title, content, image, saveTime FROM news INNER JOIN newsInfo ON news.newsIdx = newsInfo.news_FK WHERE newsIdx = ?';
         data = await connection.query(query, req.params.idx);
         
         // 커밋
