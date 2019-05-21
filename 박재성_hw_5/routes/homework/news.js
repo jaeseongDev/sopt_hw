@@ -56,14 +56,11 @@ router.post('/', upload.array('images'), async(req, res) => {
         // 사용자로부터 데이터 받기
         let images = req.files;
         let thumbnail;        
-        let { userName, title, content } = req.body;
+        let { userName, title, contents } = req.body;
         let saveTime = moment().format('YYYY-MM-DD HH:mm:ss');
-        console.log(saveTime);
-        console.log(new Date());
         let image;
         let query;
         let results;
-        console.log(req.body);
 
         // 이미지 파일이 2개 이상 존재할 때
         if (images.length >= 2) {
@@ -81,6 +78,7 @@ router.post('/', upload.array('images'), async(req, res) => {
             query = 'INSERT INTO newsInfo (content, news_FK, image) VALUES (?, ?, ?)';
             for (let i = 1; i < images.length; i++) {
                 image = images[i].location;
+                content = contents[i-1];
                 await connection.query(query, [content, news_FK, image]);
             }
             
@@ -115,10 +113,19 @@ router.get('/:idx', async(req, res) => {
 
         // 쿼리문 실행
         query = 'SELECT title, content, image, saveTime FROM news INNER JOIN newsInfo ON news.newsIdx = newsInfo.news_FK WHERE newsIdx = ?';
-        data = await connection.query(query, req.params.idx);
-        for (let i = 0; i < data.length; i++) {
-            data[i].saveTime = moment(data[i].saveTime).format('YYYY-MM-DD HH:mm:ss');
+        let results = await connection.query(query, req.params.idx);
+
+        // 클라이언트한테 보내 줄 응답 데이터
+        let contentArr = [];
+        for (let i = 0; i < results.length; i++) {
+            contentArr[i] = { content: results[i].content, image: results[i].image }
         }
+        let data = {
+            title: results[0].title,
+            saveTime: moment(results[0].saveTime).format('YYYY-MM-DD HH:mm:ss'),
+            content: contentArr
+        }
+
         
         // 커밋
         await connection.commit();
