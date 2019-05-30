@@ -36,4 +36,49 @@ router.post('/', upload.array('thumbnail'), async(req, res) => {
     }
 });
 
+router.get('/', async(req, res) => {
+    try {
+        var connection = await pool.getConnection();        
+        
+        if (req.query.flag === '1') {
+            let query = 'SELECT webtoons.webtoonsIdx, webtoons.thumbnail, webtoons.title, webtoons.writer, COUNT(likes.webtoonsIdx) as likes '
+                        + 'FROM webtoons LEFT OUTER JOIN likes '
+                        + 'ON webtoons.webtoonsIdx = likes.webtoonsIdx '
+                        + 'GROUP BY webtoons.webtoonsIdx '
+                        + 'ORDER BY likes DESC'
+            let result = await connection.query(query);
+            res.status(200).json(utils.successTrue(statusCode.CREATED, resMessage.READ_SUCCESS, result));
+        } else if (req.query.flag === '2') {
+            let query = 'SELECT webtoons.webtoonsIdx, webtoons.thumbnail, webtoons.title, webtoons.writer, COUNT(likes.webtoonsIdx) as likes '
+                        + 'FROM webtoons LEFT OUTER JOIN likes '
+                        + 'ON webtoons.webtoonsIdx = likes.webtoonsIdx '
+                        + 'WHERE webtoons.createTime >= DATE_ADD(NOW(), INTERVAL -7 DAY) '
+                        + 'GROUP BY webtoons.webtoonsIdx '
+                        + 'ORDER BY likes DESC'
+            let result = await connection.query(query);
+            res.status(200).json(utils.successTrue(statusCode.CREATED, resMessage.READ_SUCCESS, result));
+        } else if (req.query.flag === '3') {
+            let query = 'SELECT webtoons.webtoonsIdx, webtoons.thumbnail, webtoons.title, webtoons.writer, COUNT(likes.webtoonsIdx) as likes '
+                        + 'FROM webtoons LEFT OUTER JOIN likes '
+                        + 'ON webtoons.webtoonsIdx = likes.webtoonsIdx '
+                        + 'WHERE webtoons.isFinished = 1 '
+                        + 'GROUP BY webtoons.webtoonsIdx '
+                        + 'ORDER BY likes DESC'
+            let result = await connection.query(query);
+            res.status(200).json(utils.successTrue(statusCode.OK, resMessage.READ_SUCCESS, result));
+        } else {
+            if (!req.query.flag) {
+                res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
+            } else {
+                res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.WRONG_PARAMS));
+            }
+        }
+    } catch(err) {
+        console.log(err);
+        res.status(200).json(utils.successFalse(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
+    } finally {
+        connection.release();
+    }
+})
+
 module.exports = router;

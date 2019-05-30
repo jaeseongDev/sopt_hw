@@ -45,4 +45,39 @@ router.post('/', upload.fields([{ name: 'thumbnail' }, { name: 'images'}]), asyn
     }
 });
 
+
+router.get('/', async(req, res) => {
+    try {
+        var connection = await pool.getConnection();        
+        if (!req.query.webtoonsIdx) {
+            res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
+        } else {
+            let query1 = 'SELECT title FROM webtoons WHERE webtoonsIdx = ?';
+            let result1 = await connection.query(query1, [req.query.webtoonsIdx]);
+            if (!result1[0]) {
+                res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.WRONG_PARAMS));
+            } else {
+                let query2 = 'SELECT contents.contentsIdx, contents.thumbnail, contents.title, '
+                        + 'DATE_FORMAT(contents.writeTime, "%y.%m.%d") as writeTime, '
+                        + 'COUNT(visiting.contentsIdx) as visitings '
+                        + 'FROM contents LEFT OUTER JOIN visiting '
+                        + 'ON contents.contentsIdx = visiting.contentsIdx '
+                        + 'GROUP BY contents.contentsIdx ';
+
+                let result2 = await connection.query(query2);
+                let data = {
+                    webtoon_title: result1[0].title,
+                    episodes: result2
+                };
+                res.status(200).json(utils.successTrue(statusCode.OK, resMessage.READ_SUCCESS, data));
+            }
+        }
+    } catch(err) {
+        console.log(err);
+        res.status(200).json(utils.successFalse(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
+    } finally {
+        connection.release();
+    }
+})
+
 module.exports = router;
