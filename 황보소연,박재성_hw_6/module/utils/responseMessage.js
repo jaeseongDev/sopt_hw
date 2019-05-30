@@ -3,6 +3,8 @@ module.exports = {
     READ_SUCCESS: "데이터 조회 성공",
     DELETE_SUCCESS: "데이터 삭제 성공",
     UPDATE_SUCCESS: "데이터 수정 성공",
+    SAVE_LIKES: "하트 설정 성공",
+    DELETE_LIKES: "하트 해제 성공",
 
 
     NULL_VALUE: "Params나 Body값에 Null이 존재합니다.",
