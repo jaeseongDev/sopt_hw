@@ -17,7 +17,7 @@ router.post('/', upload.array('thumbnail'), async(req, res) => {
         if (!files[0] || !title || !writer || !isFinished) {
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         // Params에 잘못된 값이 입력된 경우
-        } else if (isFinished !== '1' && isFinished !== '2') {
+        } else if (isFinished !== '1' && isFinished !== '0') {
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.WRONG_PARAMS));
         // 사진이 2장 이상 첨부된 경우
         } else if (files.length > 1) {

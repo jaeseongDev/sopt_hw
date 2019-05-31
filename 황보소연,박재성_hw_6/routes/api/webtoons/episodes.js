@@ -21,20 +21,25 @@ router.post('/', upload.fields([{ name: 'thumbnail' }, { name: 'images'}]), asyn
         } else if (files['thumbnail'].length > 1) {
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.TOO_MANY_FILES));
         } else {
-            const thumbnail = files['thumbnail'][0].location;
-            let query = 'INSERT INTO contents (thumbnail, title, webtoonsIdx) VALUES (?, ?, ?)';
-            let result = await connection.query(query, [thumbnail, title, webtoonsIdx]);
-            const contentsIdx = result.insertId;
+            let query = 'SELECT webtoonsIdx FROM webtoons WHERE webtoonsIdx = ?';
+            let result = await connection.query(query, [webtoonsIdx]);
+            if (!result[0]) {
+                res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.WRONG_PARAMS));
+            } else {
+                const thumbnail = files['thumbnail'][0].location;
+                let query = 'INSERT INTO contents (thumbnail, title, webtoonsIdx) VALUES (?, ?, ?)';
+                let result = await connection.query(query, [thumbnail, title, webtoonsIdx]);
+                const contentsIdx = result.insertId;
 
-            for (let i = 0; i < req.files['images'].length; i++) {
-                let image = req.files['images'][i].location;
-                let query = 'INSERT INTO contentsImg (image, contentsIdx) VALUES (?, ?)';
-                await connection.query(query, [image, contentsIdx])
-            };
+                for (let i = 0; i < req.files['images'].length; i++) {
+                    let image = req.files['images'][i].location;
+                    let query = 'INSERT INTO contentsImg (image, contentsIdx) VALUES (?, ?)';
+                    await connection.query(query, [image, contentsIdx])
+                };
 
-            await connection.commit();
-
-            res.status(200).json(utils.successTrue(statusCode.CREATED, resMessage.SAVE_SUCCESS));
+                await connection.commit();
+                res.status(200).json(utils.successTrue(statusCode.CREATED, resMessage.SAVE_SUCCESS));    
+            }
         }
     } catch(err) {
         connection.rollback();

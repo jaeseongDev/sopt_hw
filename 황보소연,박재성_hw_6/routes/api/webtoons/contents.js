@@ -4,21 +4,21 @@ const pool = require('../../../config/dbConfig');
 const utils = require('../../../module/utils/utils');
 const resMessage = require('../../../module/utils/responseMessage');
 const statusCode = require('../../../module/utils/statusCode');
-const upload = require('../../../config/multer');
 
 router.get('/', async(req, res) => {
     try {
+        const { contentsIdx } = req.query;
         var connection = await pool.getConnection();        
-        if (!req.query.contentsIdx) {
+        if (!contentsIdx) {
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         } else {
             let query1 = 'SELECT * FROM webtoons WHERE webtoonsIdx = (SELECT webtoonsIdx FROM contents WHERE contentsIdx = ?)';
-            let result1 = await connection.query(query1, [req.query.contentsIdx]);
+            let result1 = await connection.query(query1, [contentsIdx]);
             if (!result1[0]) {
                 res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.WRONG_PARAMS));
             } else {
-                let query2 = 'SELECT * FROM contentsImg WHERE contentsIdx = ?';
-                let result2 = await connection.query(query2, [req.query.contentsIdx]);;
+                let query2 = 'SELECT contentsImgIdx, image FROM contentsImg WHERE contentsIdx = ?';
+                let result2 = await connection.query(query2, [contentsIdx]);
                 let data = {
                     webtoon_title: result1[0].title,
                     episode_images: result2

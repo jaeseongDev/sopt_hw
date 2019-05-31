@@ -8,7 +8,7 @@ module.exports = {
 
 
     NULL_VALUE: "Params나 Body값에 Null이 존재합니다.",
-    WRONG_PARAMS: "Params에 잘못된 값이 입력되었습니다.",
+    WRONG_PARAMS: "Params나 Body에 잘못된 값이 입력되었습니다.",
     TOO_MANY_FILES: "첨부 가능한 파일 개수를 확인해주세요.",
     INTERNAL_SERVER_ERROR: "서버 측에서 발생한 에러입니다.",
     
