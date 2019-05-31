@@ -1,7 +1,4 @@
 #솝커툰
-ㄷ
 
-ㄷㅁㄴㅇㄻㄷ
-
-
-
+## DB ERD
+![DB ERD](./public/images/readme/ERD.png)
