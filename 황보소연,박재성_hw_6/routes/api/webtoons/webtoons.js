@@ -38,8 +38,7 @@ router.post('/', upload.array('thumbnail'), async(req, res) => {
 
 router.get('/', async(req, res) => {
     try {
-        var connection = await pool.getConnection();        
-        
+        var connection = await pool.getConnection();
         if (req.query.flag === '1') {
             let query = 'SELECT webtoons.webtoonsIdx, webtoons.thumbnail, webtoons.title, webtoons.writer, COUNT(likes.webtoonsIdx) as likes '
                         + 'FROM webtoons LEFT OUTER JOIN likes '
