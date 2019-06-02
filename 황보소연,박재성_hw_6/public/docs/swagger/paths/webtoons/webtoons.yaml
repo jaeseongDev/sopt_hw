@@ -1,0 +1,120 @@
+get:
+  summary: 웹툰들(웹툰 메인)
+  parameters:
+    - in: query
+      name: webtoonsIdx
+      required: true
+      schema:
+        type: integer
+      description: 웹툰 인덱스
+  responses:
+    '200':
+      description: 데이터 조회 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 200
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 데이터 조회 성공
+              data:
+                type: array
+                example: [
+                  {
+                    "webtoonsIdx": 1,
+                    "thumbnail": "https://abcd.a",
+                    "title": "문어툰",
+                    "likes": 10000,
+                    "writer": "돌무너"
+                  }, 
+                  {
+                    "webtoonsIdx": 2,
+                    "thumbnail": "https://abcd.a",
+                    "title": "문어툰",
+                    "likes": 10000,
+                    "writer": "돌무너"
+                  }, 
+                ]
+    '400':
+      $ref: '../../components/responses.yaml#400-NULL_VALUE'
+    '400 ':
+      $ref: '../../components/responses.yaml#400-ALREADY_USER'
+    '500 ':
+      $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
+post:
+  summary: 웹툰 게시하기
+  requestBody:
+    require: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            thumbnail:
+              type: string
+              format: base64
+              description: |
+                웹툰 썸네일
+
+                (이미지 1개만 첨부 가능)
+            title:
+              type: string
+              description: 웹툰 제목
+            writer:
+              type: string
+              description: 웹툰 작가
+            isFinished:
+              type: integer
+              description: |
+                완결 여부
+
+                isFinished=1 (완결한 경우)
+
+                isFinished=0 (완결하지 않은 경우)
+          require:
+            - thumbnail
+            - title
+            - writer
+            - isFinished
+  responses:
+    '201':
+      $ref: '../../components/responses.yaml#201-SAVE_SUCCESS'
+    '400':
+      $ref: '../../components/responses.yaml#400-NULL_VALUE'
+    '400 ':
+      $ref: '../../components/responses.yaml#400-WRONG_PARAMS'
+    '400  ':
+      $ref: '../../components/responses.yaml#400-TOO_MANY_FILES'
+    '500 ':
+      $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
+delete:
+  summary: 웹툰 삭제하기
+  requestBody:
+    require: true
+    content:
+      application/x-www-form-urlencoded:
+        schema:
+          type: object
+          properties:
+            webtoonIdx:
+              type: integer
+              description: |
+                웹툰 인덱스
+          require:
+            - webtoonsIdx
+  responses:
+    '200':
+      $ref: '../../components/responses.yaml#200-DELETE_SUCCESS'
+    '400':
+      $ref: '../../components/responses.yaml#400-NULL_VALUE'
+    '400 ':
+      $ref: '../../components/responses.yaml#400-WRONG_PARAMS'
+    '500 ':
+      $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'

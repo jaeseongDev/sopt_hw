@@ -6,12 +6,14 @@ module.exports = {
     SAVE_LIKES: "하트 설정 성공",
     DELETE_LIKES: "하트 해제 성공",
     LOGIN_SUCCESS: "로그인 성공",
+    SIGNUP_SUCCESS: "회원가입 성공",
 
 
     NULL_VALUE: "Params나 Body값에 Null이 존재합니다.",
     WRONG_PARAMS: "Params나 Body에 잘못된 값이 입력되었습니다.",
     TOO_MANY_FILES: "첨부 가능한 파일 개수를 확인해주세요.",
     INTERNAL_SERVER_ERROR: "서버 측에서 발생한 에러입니다.",
+    FORBIDDEN_USER: "데이터를 작성한 사용자만 수정 및 삭제할 수 있습니다.",
 
     ALREADY_USER: "중복된 아이디가 존재합니다.", 
     LOGIN_FAIL: "아이디나 비밀번호가 일치하지 않습니다.",

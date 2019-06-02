@@ -1,0 +1,31 @@
+# Open API 버전 (주로 3.0.0을 이용한다.)
+openapi: 3.0.0
+
+# API 문서에 대한 정보 (버전, 제목, 설명)
+info:
+  version: '1.0.0'
+  title: '솝커툰 API'
+  description: '솝커툰 API'
+  
+# API 서버에 대한 정보
+servers:
+  # - url: "http://15.164.83.64:3000/api" # API를 제공하는 서버의 주소
+  - url: "http://localhost:3000/api"
+    description: 솝커툰 API # 제공하는 API에 대한 설명
+
+# 각 URI에 대한 정보를 기재
+paths:
+  /auth/signin:
+    $ref: './paths/auth/signin.yaml'
+  /auth/signup: 
+    $ref: './paths/auth/signup.yaml'
+  /webtoons:
+    $ref: './paths/webtoons/webtoons.yaml'
+  /webtoons/episodes:
+    $ref: './paths/webtoons/episodes.yaml'
+  /webtoons/contents:
+    $ref: './paths/webtoons/contents.yaml'
+  /webtoons/episodes/comments:
+    $ref: './paths/webtoons/comments.yaml'
+  /webtoons/likes:
+    $ref: './paths/webtoons/likes.yaml'

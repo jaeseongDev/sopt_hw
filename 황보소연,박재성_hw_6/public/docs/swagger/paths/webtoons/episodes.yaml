@@ -1,0 +1,121 @@
+get:
+  summary: 웹툰 에피소드들(웹툰 리스트)
+  parameters:
+    - in: query
+      name: webtoonsIdx
+      required: true
+      schema:
+        type: integer
+      description: 웹툰 인덱스
+  responses:
+    '200':
+      description: 웹툰 데이터 조회 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 200
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 데이터 조회 성공
+              data:
+                type: array
+                example: {
+                  webtoon_title: "무너의 삶",
+                  episodes: [{
+                    "contentsIdx": 1,
+                    "thumbnail": "https://akasndflasdnkf.a",
+                    "title": "1화.문어지지 말자!",
+                    "visitings": 4643,
+                    "writeTime": "19.03.25."
+                  },
+                  {
+                    "contentsIdx": 1,
+                    "thumbnail": "https://akasndflasdnkf.a",
+                    "title": "1화.문어지지 말자!",
+                    "visitings": 4643,
+                    "writeTime": "19.03.25."
+                  }
+                  ]
+                }
+    '400':
+      $ref: '../../components/responses.yaml#400-NULL_VALUE'
+    '400 ':
+      $ref: '../../components/responses.yaml#400-WRONG_PARAMS'
+    '500 ':
+      $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
+post:
+  summary: 웹툰 에피소드 작성
+  requestBody:
+    require: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            webtoonsIdx:
+              type: integer
+              description: 웹툰 인덱스
+            thumbnail:
+              type: string
+              format: base64
+              description: |
+                에피소드 썸네일
+
+                (이미지 1개만 첨부 가능)
+            title:
+              type: string
+              description: 에피소드 제목
+            images:
+              type: string
+              format: base64
+              description: |
+                웹툰 에피소드 내용 (이미지)
+
+                (이미지 1개 이상 첨부 가능)
+          require:
+            - webtoonsIdx
+            - thumbnail
+            - title
+            - images
+  responses:
+    '200':
+      $ref: '../../components/responses.yaml#200-UPDATE_SUCCESS'
+    '400':
+      $ref: '../../components/responses.yaml#400-NULL_VALUE'
+    '400 ':
+      $ref: '../../components/responses.yaml#400-WRONG_PARAMS'
+    '400  ':
+      $ref: '../../components/responses.yaml#400-TOO_MANY_FILES'
+    '500 ':
+      $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
+delete:
+  summary: 웹툰 에피소드 삭제
+  requestBody:
+    require: true
+    content:
+      application/x-www-form-urlencoded:
+        schema:
+          type: object
+          properties:
+            contentsIdx:
+              type: integer
+              description: |
+                에피소드 인덱스
+          require:
+            - contentsIdx
+  responses:
+    '200':
+      $ref: '../../components/responses.yaml#200-DELETE_SUCCESS'
+    '400':
+      $ref: '../../components/responses.yaml#400-NULL_VALUE'
+    '400 ':
+      $ref: '../../components/responses.yaml#400-WRONG_PARAMS'
+    '500 ':
+      $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'

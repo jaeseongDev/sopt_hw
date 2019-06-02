@@ -1,0 +1,192 @@
+200-LOGIN_SUCCESS:
+  description: 아이디와 비밀번호가 일치해서 로그인 성공
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 200
+          success:
+            type: boolean
+            example: true
+          message:
+            type: string
+            example: '로그인 성공'
+200-SIGNUP_SUCCESS:
+  description: 회원가입 성공
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 200
+          success:
+            type: boolean
+            example: true
+          message:
+            type: string
+            example: '회원가입 성공'
+200-DELETE_SUCCESS:
+  description: 데이터 삭제 성공
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 200
+          success:
+            type: boolean
+            example: true
+          message:
+            type: string
+            example: '데이터 삭제 성공'
+201-SAVE_SUCCESS:
+  description: 데이터 저장 성공
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 201
+          success:
+            type: boolean
+            example: true
+          message:
+            type: string
+            example: '데이터 저장 성공'
+200-UPDATE_SUCCESS:
+  description: 데이터 수정 성공
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 200
+          success:
+            type: boolean
+            example: true
+          message:
+            type: string
+            example: '데이터 수정 성공'
+400-NULL_VALUE:
+  description: Params나 Body 값에 Null이 존재합니다. 
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 400
+          success:
+            type: boolean
+            example: false
+          message:
+            type: string
+            example: Params나 Body값에 Null이 존재합니다.
+400-WRONG_PARAMS:
+  description: Params나 Body에 잘못된 값이 입력된 경우
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 400
+          success:
+            type: boolean
+            example: false
+          message:
+            type: string
+            example: Params나 Body에 잘못된 값이 입력된 경우
+400-ALREADY_USER:
+  description: 중복된 아이디가 존재하는 경우
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 400
+          success:
+            type: boolean
+            example: false
+          message:
+            type: string
+            example: 중복된 아이디가 존재합니다. 
+400-TOO_MANY_FILES:
+  description: 사진이 2장 이상 첨부된 경우
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 400
+          success:
+            type: boolean
+            example: false
+          message:
+            type: string
+            example: 첨부 가능한 파일 개수를 확인해주세요.
+401-LOGIN_FAIL:
+  description: 아이디나 비밀번호가 일치하지 않아서 로그인 실패
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 401
+          success:
+            type: boolean
+            example: false
+          message:
+            type: string
+            example: 아이디나 비밀번호가 일치하지 않습니다.
+403-FORBIDDEN_USER:
+  description: 작성자가 아닌 다른 사용자가 수정 및 삭제를 요청한 경우
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 403
+          success:
+            type: boolean
+            example: false
+          message:
+            type: string
+            example: 데이터를 작성한 사용자만 수정 및 삭제할 수 있습니다.
+500-INTERNAL_SERVER_ERROR:
+  description: 서버 에러
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 500
+          success:
+            type: boolean
+            example: false
+          message:
+            type: string
+            example: 서버측에서 발생한 에러입니다.

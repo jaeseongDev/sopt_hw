@@ -1,0 +1,46 @@
+get:
+  summary: 웹툰 에피소드의 내용(웹툰)
+  parameters:
+    - in: query
+      name: contentsIdx
+      required: true
+      schema:
+        type: integer
+      description: 웹툰 에피소드 인덱스
+  responses:
+    '200':
+      description: 데이터 조회 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 200
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: 데이터 조회 성공
+              data:
+                type: array
+                example: {
+                  webtoon_title: "무너의 삶",
+                  episodes_images: [{
+                    "contentsImgIdx": 1,
+                    "image": "https://akasndflasdnkf.a"
+                  },
+                  {
+                    "contentsImgIdx": 1,
+                    "image": "https://akasndflasdnkf.a"
+                  },
+                  ]
+                }
+    '400':
+      $ref: '../../components/responses.yaml#400-NULL_VALUE'
+    '400 ':
+      $ref: '../../components/responses.yaml#400-WRONG_PARAMS'
+    '500 ':
+      $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'

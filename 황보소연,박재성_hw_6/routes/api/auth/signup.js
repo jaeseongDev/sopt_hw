@@ -36,7 +36,7 @@ router.post('/', async(req, res) => {
                             console.log(err);
                             res.status(200).json(utils.successFalse(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
                         }
-                        res.status(200).send(utils.successTrue(statusCode.OK, resMsg.SAVE_SUCCESS));
+                        res.status(200).send(utils.successTrue(statusCode.OK, resMsg.SIGNUP_SUCCESS));
                 })
             }
         });
