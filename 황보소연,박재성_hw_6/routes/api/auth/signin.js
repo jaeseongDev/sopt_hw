@@ -17,7 +17,7 @@ router.post('/', async(req, res) => {
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         } else {
             // 아이디가 없는 경우
-            let query = 'SELECT userId, userPw, salt FROM user WHERE userId = ?';
+            let query = 'SELECT * FROM user WHERE userId = ?';
             const result = await connection.query(query, [userId]);
             if (!result[0]) {
                 res.status(200).json(utils.successFalse(statusCode.UNAUTHORIZED, resMessage.LOGIN_FAIL));
@@ -29,7 +29,10 @@ router.post('/', async(req, res) => {
                     res.status(200).json(utils.successFalse(statusCode.UNAUTHORIZED, resMessage.LOGIN_FAIL));
                 // 로그인 성공
                 } else if (userPw == result[0].userPw) {
-                    res.status(200).json(utils.successTrue(statusCode.OK, resMessage.LOGIN_SUCCESS));
+                    let data = {
+                        userIdx: result[0].userIdx
+                    };
+                    res.status(200).json(utils.successTrue(statusCode.OK, resMessage.LOGIN_SUCCESS, data));
                 }
             }
         }

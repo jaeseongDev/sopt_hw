@@ -69,7 +69,8 @@ router.get('/', async(req, res) => {
         } else{
             let selectCountCommentQuery = 'SELECT count(*) as counting FROM comments WHERE contentsIdx = ?'
             let result = await connection.query(selectCountCommentQuery, [contentsIdx]);
-            let query3 = "SELECT c.commentsIdx, c.image, DATE_FORMAT(c.writeTime, '%y.%m.%d %H.%i.%s') as writeTime, c.content, u.userName FROM comments c, user u WHERE c.userIdx=u.userIdx";
+            let query3 = "SELECT c.commentsIdx, c.image, DATE_FORMAT(c.writeTime, '%y.%m.%d %H.%i.%s') as writeTime, c.content, u.userName FROM comments c, user u " 
+                        + "WHERE c.userIdx=u.userIdx ORDER BY c.writeTime DESC";
             let result3 = await connection.query(query3);
 
             let data = {

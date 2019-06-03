@@ -54,7 +54,7 @@ router.post('/', upload.fields([{ name: 'thumbnail' }, { name: 'images'}]), asyn
 router.get('/', async(req, res) => {
     try {
         var connection = await pool.getConnection();        
-        if (!req.query.webtoonsIdx) {
+        if (!req.query.webtoonsIdx || !req.query.userIdx) {
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         } else {
             let query1 = 'SELECT title FROM webtoons WHERE webtoonsIdx = ?';
@@ -67,11 +67,19 @@ router.get('/', async(req, res) => {
                         + 'COUNT(visiting.contentsIdx) as visitings '
                         + 'FROM contents LEFT OUTER JOIN visiting '
                         + 'ON contents.contentsIdx = visiting.contentsIdx '
-                        + 'GROUP BY contents.contentsIdx ';
-
+                        + 'GROUP BY contents.contentsIdx '
+                        + 'ORDER BY contents.writeTime DESC';
                 let result2 = await connection.query(query2);
+                let query3 = 'SELECT likesIdx FROM likes WHERE userIdx = ? AND webtoonsIdx = ?';
+                let result3 = await connection.query(query3, [req.query.userIdx, req.query.webtoonsIdx]); 
+                if (!result3[0]) {
+                    var isLike = false;
+                } else {
+                    var isLike = true;
+                };
                 let data = {
                     webtoon_title: result1[0].title,
+                    isLike: isLike,
                     episodes: result2
                 };
                 res.status(200).json(utils.successTrue(statusCode.OK, resMessage.READ_SUCCESS, data));
