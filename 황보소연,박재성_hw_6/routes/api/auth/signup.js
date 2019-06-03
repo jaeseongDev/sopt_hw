@@ -4,11 +4,16 @@ var utils = require('../../../module/utils/utils');
 var resMsg = require('../../../module/utils/responseMessage');
 var statusCode = require('../../../module/utils/statusCode');
 var pool = require('../../../config/dbConfig');
+var cryptoPassword = require('../../../module/cryptoPassword');
 
 //회원가입, id 중복 회원가입 불가
 router.post('/', async(req, res) => {
-    const { userId, userPw, userName } = req.body;
-    const insertUserInfoQuery = 'INSERT INTO user(userPw, userName, userId) VALUES(?,?,?)';
+    let { userId, userPw, userName } = req.body;
+    let salt = await cryptoPassword.salt();
+
+    userPw = await cryptoPassword.hashedPassword(userPw, salt);
+
+    const insertUserInfoQuery = 'INSERT INTO user(userPw, userName, userId, salt) VALUES(?,?,?,?)';
     //행을 하나이상 반환하면 true
     const selectCheckSameId = 'SELECT EXISTS (SELECT * FROM user WHERE userId = ?) as success';
 
@@ -31,7 +36,7 @@ router.post('/', async(req, res) => {
                     res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMsg.ALREADY_USER));
                 // 이미 존재하는 아이디가 없을 경우
                 } else if(result[0].success == false){
-                    connection.query(insertUserInfoQuery, [userPw, userName, userId], (err, result) => {
+                    connection.query(insertUserInfoQuery, [userPw, userName, userId, salt], (err, result) => {
                         if (err) {
                             console.log(err);
                             res.status(200).json(utils.successFalse(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));

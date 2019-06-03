@@ -2,11 +2,16 @@ get:
   summary: 웹툰들(웹툰 메인)
   parameters:
     - in: query
-      name: webtoonsIdx
+      name: flag
       required: true
       schema:
         type: integer
-      description: 웹툰 인덱스
+      description: |
+        flag=1(인기) : 하트(likes)가 많은 순서대로 정렬
+
+        flag=2(신작) : 게시 후 7일 이내의 웹툰들 & 하트(likes)가 많은 순서대로 정렬
+        
+        flag=3(완결) : 완결(isFinished: true)이 난 웹툰들 & 하트(likes)가 많은 순서대로 정렬
   responses:
     '200':
       description: 데이터 조회 성공
