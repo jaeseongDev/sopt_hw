@@ -4,14 +4,17 @@ const pool = require('../../../config/dbConfig');
 const utils = require('../../../module/utils/utils');
 const resMessage = require('../../../module/utils/responseMessage');
 const statusCode = require('../../../module/utils/statusCode');
+var jwt = require('../../../module/jwt');
 
-router.post('/', async(req, res) => {
+router.post('/', jwt.verifyToken, async(req, res) => {
     try {
-        const { userIdx, webtoonsIdx } = req.body;
+        const { userIdx } = req.decoded;
+        console.log(req.decoded);
+        const { webtoonsIdx } = req.body;
 
         var connection = await pool.getConnection();
 
-        let query1 = 'SELECT EXISTS (SELECT * FROM user WHERE useridx = ?) as isExist';
+        let query1 = 'SELECT EXISTS (SELECT * FROM user WHERE userIdx = ?) as isExist';
         let query2 = 'SELECT EXISTS (SELECT * FROM webtoons WHERE webtoonsIdx = ?) as isExist';
         let result1 = await connection.query(query1, [userIdx]);
         let result2 = await connection.query(query2, [webtoonsIdx]);
@@ -28,11 +31,11 @@ router.post('/', async(req, res) => {
             if (result[0].isExist == false) {
                 let query2 = 'INSERT INTO likes (userIdx, webtoonsIdx) VALUES (?, ?)';
                 let result2 = await connection.query(query2, [userIdx, webtoonsIdx]);
-                res.status(200).json(utils.successTrue(statusCode.CREATED, resMessage.SAVE_LIKES, result2));
+                res.status(200).json(utils.successTrue(statusCode.CREATED, resMessage.SAVE_LIKES));
             } else {
                 let query3 = 'DELETE FROM likes WHERE userIdx = ? AND webtoonsIdx = ?';
                 let result3 = await connection.query(query3, [userIdx, webtoonsIdx]);
-                res.status(200).json(utils.successTrue(statusCode.OK, resMessage.DELETE_LIKES, result3));
+                res.status(200).json(utils.successTrue(statusCode.OK, resMessage.DELETE_LIKES));
             } 
         }
     } catch(err) {

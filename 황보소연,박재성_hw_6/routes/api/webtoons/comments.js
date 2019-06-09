@@ -7,26 +7,24 @@ var resMessage = require('../../../module/utils/responseMessage');
 var statusCode = require('../../../module/utils/statusCode');
 var pool = require('../../../config/dbConfig');
 var upload = require('../../../config/multer');
+var jwt = require('../../../module/jwt');
 
 //댓글 작성하기
-router.post('/', upload.array('image'), async(req, res) => {
+router.post('/', upload.array('image'), jwt.verifyToken, async(req, res) => {
     try{
-        const { content, contentsIdx, userIdx} = req.body;
+        const { content, contentsIdx } = req.body;
+        const { userId, userIdx } = req.decoded;
         const files = req.files;
         var connection = await pool.getConnection();
 
         let selectContentIdxquery = 'SELECT contentsIdx FROM contents WHERE contentsIdx=? '
-        let selectUserIdxquery = 'SELECT userIdx FROM user WHERE userIdx=?'
-
         let result = await connection.query(selectContentIdxquery, [contentsIdx]);
-        let result2 = await connection.query(selectUserIdxquery, [userIdx]);
-
         
         // null값이 보내진 경우
-        if(!content || !contentsIdx || !userIdx){
+        if(!content || !contentsIdx || !userId || !userIdx){
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
             //잘못된 값이 보내진 경우
-        } else if(!result[0] || !result2[0]){  
+        } else if(!result[0]){  
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.WRONG_PARAMS));
         }
             //사진을 2장 이상 첨부한 경우
@@ -41,7 +39,6 @@ router.post('/', upload.array('image'), async(req, res) => {
             let query = 'INSERT INTO comments( content, contentsIdx, userIdx, image) VALUES (?, ?, ?, ?)'
             await connection.query(query, [content, contentsIdx, userIdx, image]);
             res.status(200).json(utils.successTrue(statusCode.CREATED, resMessage.SAVE_SUCCESS));
-
         }
     } catch(err){
         console.log(err);
@@ -89,32 +86,27 @@ router.get('/', async(req, res) => {
 
 })
 
-router.delete('/', async(req, res) => {
+router.delete('/', jwt.verifyToken, async(req, res) => {
     try{
-        const { commentsIdx, userIdx } = req.body;
+        const { userIdx } = req.decoded;
+        const { commentsIdx } = req.body;
         var connection = await pool.getConnection();
-
 
         let query1 = 'SELECT commentsIdx FROM comments WHERE commentsIdx = ?'
         let result1 = await connection.query(query1, [commentsIdx]);
-        let query2 = 'SELECT userIdx FROM user WHERE userIdx = ?'
-        let result2 = await connection.query(query2, [userIdx]);
-        console.log(result1);
-        console.log(result2);
         
         // null일 경우
         if(!commentsIdx || !userIdx){
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         //잘못된 값이 보내진 경우
         
-        } else if(!result1[0] || !result2[0]){  
+        } else if(!result1[0]){  
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.WRONG_PARAMS));
         } else {
             let deleteQuery = 'DELETE FROM comments WHERE commentsIdx = ?'
-            let result = await connection.query(deleteQuery, [commentsIdx]);
+            await connection.query(deleteQuery, [commentsIdx]);
             res.status(200).json(utils.successTrue(statusCode.CREATED, resMessage.DELETE_SUCCESS));
         }
-
     }catch(err){
         console.log(err);
         res.status(200).json(utils.successFalse(statusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR));
@@ -124,25 +116,23 @@ router.delete('/', async(req, res) => {
 
 })
 
-router.put('/', upload.array('image'), async(req, res) => {
+router.put('/', upload.array('image'), jwt.verifyToken, async(req, res) => {
     try{
-        const { content, commentsIdx, userIdx } = req.body;
-        console.log(content);
+        const { userIdx } = req.decoded;
+        console.log(userIdx);
+        const { content, commentsIdx } = req.body;
         const files = req.files;
         var connection = await pool.getConnection();
 
-        let selectContentIdxquery = 'SELECT commentsIdx FROM comments WHERE commentsIdx=? '
-        let selectUserIdxquery = 'SELECT userIdx FROM user WHERE userIdx=?'
-
-        let result = await connection.query(selectContentIdxquery, [commentsIdx]);
-        let result2 = await connection.query(selectUserIdxquery, [userIdx]);
+        let selectContentIdxquery = 'SELECT commentsIdx FROM comments WHERE commentsIdx=? AND userIdx=?'
+        let result = await connection.query(selectContentIdxquery, [commentsIdx, userIdx]);
 
         
         // null값이 보내진 경우
         if(!content || !commentsIdx || !userIdx){
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         //잘못된 값이 보내진 경우
-        } else if(!result[0] || !result2[0]){  
+        } else if(!result[0]){  
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.WRONG_PARAMS));
         }
             //사진을 2장 이상 첨부한 경우

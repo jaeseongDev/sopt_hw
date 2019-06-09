@@ -5,6 +5,7 @@ const utils = require('../../../module/utils/utils');
 const resMessage = require('../../../module/utils/responseMessage');
 const statusCode = require('../../../module/utils/statusCode');
 const upload = require('../../../config/multer');
+var jwt = require('../../../module/jwt');
 
 router.post('/', upload.fields([{ name: 'thumbnail' }, { name: 'images'}]), async(req, res) => {
     try {
@@ -51,14 +52,15 @@ router.post('/', upload.fields([{ name: 'thumbnail' }, { name: 'images'}]), asyn
 });
 
 
-router.get('/', async(req, res) => {
+router.get('/', jwt.verifyTokenNotLoggedIn, async(req, res) => {
     try {
+        const { webtoonsIdx } = req.query;
         var connection = await pool.getConnection();        
-        if (!req.query.webtoonsIdx || !req.query.userIdx) {
+        if (!webtoonsIdx) {
             res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         } else {
             let query1 = 'SELECT title FROM webtoons WHERE webtoonsIdx = ?';
-            let result1 = await connection.query(query1, [req.query.webtoonsIdx]);
+            let result1 = await connection.query(query1, [webtoonsIdx]);
             if (!result1[0]) {
                 res.status(200).json(utils.successFalse(statusCode.BAD_REQUEST, resMessage.WRONG_PARAMS));
             } else {
@@ -70,12 +72,18 @@ router.get('/', async(req, res) => {
                         + 'GROUP BY contents.contentsIdx '
                         + 'ORDER BY contents.writeTime DESC';
                 let result2 = await connection.query(query2);
-                let query3 = 'SELECT likesIdx FROM likes WHERE userIdx = ? AND webtoonsIdx = ?';
-                let result3 = await connection.query(query3, [req.query.userIdx, req.query.webtoonsIdx]); 
-                if (!result3[0]) {
-                    var isLike = false;
+
+                if (!req.decoded) {
+                    var isLike = "NotLoggedIn"
                 } else {
-                    var isLike = true;
+                    const { userIdx } = req.decoded;
+                    let query3 = 'SELECT likesIdx FROM likes WHERE userIdx = ? AND webtoonsIdx = ?';
+                    let result3 = await connection.query(query3, [userIdx, webtoonsIdx]); 
+                    if (!result3[0]) {
+                        var isLike = false;
+                    } else {
+                        var isLike = true;
+                    };
                 };
                 let data = {
                     webtoon_title: result1[0].title,

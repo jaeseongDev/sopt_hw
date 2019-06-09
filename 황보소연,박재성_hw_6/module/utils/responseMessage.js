@@ -17,6 +17,9 @@ module.exports = {
 
     ALREADY_USER: "중복된 아이디가 존재합니다.", 
     LOGIN_FAIL: "아이디나 비밀번호가 일치하지 않습니다.",
+    EXPIRED_TOKEN: "토근이 만료되었습니다.",
+    INVALID_TOKEN: "유효하지 않은 토큰입니다.",
+    
     
     
 
