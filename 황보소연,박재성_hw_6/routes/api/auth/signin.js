@@ -26,12 +26,12 @@ router.post('/', async(req, res) => {
             } else {
                 let salt = result[0].salt;
                 userPw = await cryptoPassword.hashedPassword(userPw, salt); 
-                const token = jwt.signToken(userId, userIdx);
                 // 아이디는 있는데 비밀번호가 틀린 경우
                 if (userPw != result[0].userPw) {
                     res.status(200).json(utils.successFalse(statusCode.UNAUTHORIZED, resMessage.LOGIN_FAIL));
                 // 로그인 성공
                 } else if (userPw == result[0].userPw) {
+                    const token = jwt.signToken(userId, userIdx);
                     res.status(200).json(utils.successTrue(statusCode.OK, resMessage.LOGIN_SUCCESS, { token: token }));
                 }
             }
