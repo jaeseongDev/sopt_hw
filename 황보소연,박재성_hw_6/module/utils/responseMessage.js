@@ -19,6 +19,8 @@ module.exports = {
     LOGIN_FAIL: "아이디나 비밀번호가 일치하지 않습니다.",
     EXPIRED_TOKEN: "토큰이 만료되었습니다.",
     INVALID_TOKEN: "유효하지 않은 토큰입니다.",
+    NEED_LOGIN: "로그인이 필요합니다.",
+    ALREADY_LOGIN: "이미 로그인을 한 상태입니다.",
     
     
     
