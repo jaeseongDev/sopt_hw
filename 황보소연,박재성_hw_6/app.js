@@ -2,12 +2,12 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var morgan = require('morgan');
 require('dotenv').config();
 const session = require('express-session');
 const passport = require('passport');
 const passportConfig = require('./module/passport');
-const winston = require('./log/logger');
+const logger = require('./log/logger');
 
 var indexRouter = require('./routes/api/index');
 
@@ -17,7 +17,13 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('combined'));
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'));
+} else {
+  app.use(morgan('dev'));
+};
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
