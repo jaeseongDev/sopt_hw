@@ -3,15 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "cross-env NODE_ENV=production PORT=3000 node ./bin/www",
+    "dev": "node ./bin/www"
   },
   "dependencies": {
     "aws-sdk": "^2.458.0",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
+    "cross-env": "^5.2.0",
     "crypto-promise": "^2.1.0",
     "debug": "~2.6.9",
     "dotenv": "^8.0.0",
+    "ejs": "^2.6.1",
     "express": "~4.16.0",
     "express-session": "^1.16.1",
     "http-errors": "~1.6.2",
@@ -23,6 +26,7 @@
     "passport": "^0.4.0",
     "passport-kakao": "0.0.5",
     "passport-local": "^1.0.0",
-    "promise-mysql": "^3.3.2"
+    "promise-mysql": "^3.3.2",
+    "winston": "^3.2.1"
   }
 }

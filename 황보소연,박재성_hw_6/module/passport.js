@@ -14,7 +14,7 @@ module.exports = (passport) => {
     var statusCode = require('./utils/statusCode');
 
 
-    // 로그인 전략(Strategy) : 클라이언트가 '로그인 버튼'을 눌렀을 때 작동하는 내부 알고리즘
+    // 로컬 로그인 전략(Strategy) : 클라이언트가 '로그인 버튼'을 눌렀을 때 작동하는 내부 알고리즘
     passport.use(new LocalStrategy({
             usernameField: 'userId',
             passwordField: 'userPw'
@@ -54,7 +54,6 @@ module.exports = (passport) => {
             }
         }
     ));
-
 
     // 로그인 요청이 들어왔을 때, user의 정보를 세션에 저장하는 역할 (로그인 요청이 들어왔을 때만 실행된다)
     passport.serializeUser(function (user, done) {
