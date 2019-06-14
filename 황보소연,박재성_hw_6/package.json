@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production PORT=3000 node ./bin/www",
+    "start": "cross-env NODE_ENV=production PORT=3000 pm2 start ./bin/www -i 0",
     "dev": "node ./bin/www"
   },
   "dependencies": {

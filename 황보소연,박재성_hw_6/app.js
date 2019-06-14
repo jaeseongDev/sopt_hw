@@ -7,7 +7,16 @@ require('dotenv').config();
 const session = require('express-session');
 const passport = require('passport');
 const passportConfig = require('./module/passport');
-const logger = require('./log/logger');
+
+// If we're not in production then log to the `console` with the format:
+// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
+// 
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple()
+  }));
+}
+
 
 var indexRouter = require('./routes/api/index');
 
@@ -55,7 +64,7 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  
   // render the error page
   res.status(err.status || 500);
   res.render('error');
