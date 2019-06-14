@@ -7,16 +7,7 @@ require('dotenv').config();
 const session = require('express-session');
 const passport = require('passport');
 const passportConfig = require('./module/passport');
-
-// If we're not in production then log to the `console` with the format:
-// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-// 
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }));
-}
-
+const RedisStore = require('connect-redis')(session);
 
 var indexRouter = require('./routes/api/index');
 
@@ -45,6 +36,12 @@ app.use(session({
     httpOnly: true,
     secure: false,
   },
+  store: new RedisStore({
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+    pass: process.env.REDIS_PASSWORD,
+    logErrors: true
+  })
 }))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
