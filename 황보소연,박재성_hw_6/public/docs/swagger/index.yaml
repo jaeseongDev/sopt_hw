@@ -10,9 +10,21 @@ info:
 # API 서버에 대한 정보
 servers:
   # - url: "http://13.209.206.99:3000/api"
-  - url: "http//15.164.83.64:3000/api"
-  # - url: "http://localhost:3000/api"
+  # - url: "http//15.164.83.64:3000/api"
+  - url: "http://localhost:3000/api"
     description: 솝커툰 API # 제공하는 API에 대한 설명
+
+tags:
+  - name: 로그인 및 회원가입
+    description: 로그인 및 회원가입 관련
+  - name: 웹툰
+    description: 웹툰 관련
+  - name: 웹툰 에피소드
+    description: 웹툰 에피소드 관련
+  - name: 댓글
+    description: 댓글관련
+  - name: 기타 기능
+    description: 기타 기능 관련
 
 # 각 URI에 대한 정보를 기재
 paths:
@@ -24,7 +36,7 @@ paths:
     $ref: './paths/webtoons/webtoons.yaml'
   /webtoons/episodes:
     $ref: './paths/webtoons/episodes.yaml'
-  /webtoons/contents:
+  /webtoons/episodes/contents:
     $ref: './paths/webtoons/contents.yaml'
   /webtoons/episodes/comments:
     $ref: './paths/webtoons/comments.yaml'

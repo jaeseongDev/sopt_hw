@@ -126,7 +126,7 @@ router.put('/', upload.array('image'), jwt.verifyToken, async(req, res) => {
 
         let selectContentIdxquery = 'SELECT commentsIdx FROM comments WHERE commentsIdx=? AND userIdx=?'
         let result = await connection.query(selectContentIdxquery, [commentsIdx, userIdx]);
-
+        
         
         // null값이 보내진 경우
         if(!content || !commentsIdx || !userIdx){

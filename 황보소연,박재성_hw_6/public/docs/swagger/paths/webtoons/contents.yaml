@@ -1,4 +1,6 @@
 get:
+  tags:
+    - 웹툰 에피소드
   summary: 웹툰 에피소드의 내용(웹툰)
   parameters:
     - in: query

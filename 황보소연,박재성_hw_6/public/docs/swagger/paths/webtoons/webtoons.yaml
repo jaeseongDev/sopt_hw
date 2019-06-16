@@ -1,4 +1,6 @@
 get:
+  tags:
+    - 웹툰
   summary: 웹툰들(웹툰 메인)
   parameters:
     - in: query
@@ -50,10 +52,12 @@ get:
     '400':
       $ref: '../../components/responses.yaml#400-NULL_VALUE'
     '400 ':
-      $ref: '../../components/responses.yaml#400-ALREADY_USER'
+      $ref: '../../components/responses.yaml#400-WRONG_PARAMS'
     '500 ':
       $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
 post:
+  tags:
+    - 웹툰
   summary: 웹툰 게시하기
   requestBody:
     require: true
@@ -75,14 +79,6 @@ post:
             writer:
               type: string
               description: 웹툰 작가
-            isFinished:
-              type: integer
-              description: |
-                완결 여부
-
-                isFinished=1 (완결한 경우)
-
-                isFinished=0 (완결하지 않은 경우)
           require:
             - thumbnail
             - title
@@ -100,6 +96,8 @@ post:
     '500 ':
       $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
 delete:
+  tags:
+    - 웹툰
   summary: 웹툰 삭제하기
   requestBody:
     require: true
@@ -108,7 +106,7 @@ delete:
         schema:
           type: object
           properties:
-            webtoonIdx:
+            webtoonsIdx:
               type: integer
               description: |
                 웹툰 인덱스

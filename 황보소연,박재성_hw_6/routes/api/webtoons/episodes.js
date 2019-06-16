@@ -72,7 +72,6 @@ router.get('/', jwt.verifyTokenNotLoggedIn, async(req, res) => {
                         + 'GROUP BY contents.contentsIdx '
                         + 'ORDER BY contents.writeTime DESC';
                 let result2 = await connection.query(query2);
-
                 if (!req.decoded) {
                     var isLike = "NotLoggedIn"
                 } else {

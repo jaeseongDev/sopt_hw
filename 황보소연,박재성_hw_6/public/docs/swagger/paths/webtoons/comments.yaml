@@ -1,4 +1,6 @@
 get:
+  tags:
+    - 댓글
   summary: 댓글들
   parameters:
     - in: query
@@ -51,7 +53,15 @@ get:
     '500 ':
       $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
 post:
+  tags:
+    - 댓글
   summary: 댓글작성
+  parameters:
+    - in: header
+      name: token
+      schema:
+        type: string
+      required: true
   requestBody:
     require: true
     content:
@@ -72,14 +82,10 @@ post:
             contentsIdx:
               type: integer
               description: 웹툰 에피소드 인덱스
-            userIdx:
-              type: integer
-              description: 사용자 인덱스
           require:
             - image
             - content
             - contentsIdx
-            - userIdx
   responses:
     '201':
       $ref: '../../components/responses.yaml#201-SAVE_SUCCESS'
@@ -92,7 +98,15 @@ post:
     '500 ':
       $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
 put:
+  tags:
+    - 댓글
   summary: 댓글수정
+  parameters:
+  - in: header
+    name: token
+    schema:
+      type: string
+    required: true
   requestBody:
     require: true
     content:
@@ -113,14 +127,10 @@ put:
             commentsIdx:
               type: integer
               description: 댓글 인덱스
-            userIdx:
-              type: integer
-              description: 사용자 인덱스
           require:
             - image
             - content
             - commentsIdx
-            - userIdx
   responses:
     '201':
       $ref: '../../components/responses.yaml#201-SAVE_SUCCESS'
@@ -133,23 +143,27 @@ put:
     '500 ':
       $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
 delete:
+  tags:
+    - 댓글
   summary: 댓글 삭제
+  parameters:
+  - in: header
+    name: token
+    schema:
+      type: string
+    required: true
   requestBody:
     require: true
     content:
-      application/x-www-form-urlencoded:
+      application/json:
         schema:
           type: object
           properties:
-            contentsIdx:
+            commentsIdx:
               type: integer
               description: 댓글 인덱스
-            userIdx:
-              type: integer
-              description: 사용자 인덱스
           require:
-            - contentsIdx
-            - userIdx
+            - commentsIdx
   responses:
     '200':
       $ref: '../../components/responses.yaml#200-DELETE_SUCCESS'

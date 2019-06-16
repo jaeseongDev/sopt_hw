@@ -1,6 +1,13 @@
 get:
+  tags:
+    - 웹툰 에피소드
   summary: 웹툰 에피소드들(웹툰 리스트)
   parameters:
+    - in: header
+      name: token
+      schema: 
+        type: string
+      description: 로그인 토큰
     - in: query
       name: webtoonsIdx
       required: true
@@ -28,6 +35,7 @@ get:
                 type: array
                 example: {
                   webtoon_title: "무너의 삶",
+                  isLike: true,
                   episodes: [{
                     "contentsIdx": 1,
                     "thumbnail": "https://akasndflasdnkf.a",
@@ -51,6 +59,8 @@ get:
     '500 ':
       $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
 post:
+  tags:
+    - 웹툰 에피소드
   summary: 웹툰 에피소드 작성
   requestBody:
     require: true
@@ -85,8 +95,8 @@ post:
             - title
             - images
   responses:
-    '200':
-      $ref: '../../components/responses.yaml#200-UPDATE_SUCCESS'
+    '201':
+      $ref: '../../components/responses.yaml#201-SAVE_SUCCESS'
     '400':
       $ref: '../../components/responses.yaml#400-NULL_VALUE'
     '400 ':
@@ -96,11 +106,13 @@ post:
     '500 ':
       $ref: '../../components/responses.yaml#500-INTERNAL_SERVER_ERROR'
 delete:
+  tags:
+    - 웹툰 에피소드
   summary: 웹툰 에피소드 삭제
   requestBody:
     require: true
     content:
-      application/x-www-form-urlencoded:
+      application/json:
         schema:
           type: object
           properties:

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const options = {
     algorithm: "HS256",
-    expiresIn: "20s",
+    expiresIn: "14d",
     issuer: "jaeseong"
 };
 var utils = require('./utils/utils');
@@ -22,7 +22,7 @@ exports.signToken = (userId, userIdx) => {
 
 exports.verifyToken = (req, res, next) => {
     try {
-        req.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
+        req.decoded = jwt.verify(req.headers.token, process.env.JWT_SECRET);
         return next(); // 다음 미들웨어로 넘어감.
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
@@ -33,7 +33,7 @@ exports.verifyToken = (req, res, next) => {
 };
 
 exports.verifyTokenNotLoggedIn = (req, res, next) => {
-    var token = req.headers.authorization;
+    var { token } = req.headers;
     if (!token) {
         return next();
     } else {
