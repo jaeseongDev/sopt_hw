@@ -56,4 +56,4 @@
 
 
 ## Swagger로 작성한 API 문서
-![Swagger API 문서](./)
+![Swagger API 문서](./public/images/swagger_api.png)
