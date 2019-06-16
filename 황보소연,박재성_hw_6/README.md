@@ -1,14 +1,17 @@
 # Project : 솝커툰
 2019년 SOPT 24기 합동 세미나 과제
 
+
 ## 목표
 '솝커툰'이라는 소규모 프로젝트에 대해, 클라이언트가 이용할 API를 제작
+
 
 ## 사용한 도구
 - Github
 - DB (MySQL, WorkBench, AWS RDS, Redis)
 - Node.js (+ Express.js)
 - AWS (EC2, RDS, S3, IAM)
+
 
 
 ## 사용한 개념 (공부한 개념)
