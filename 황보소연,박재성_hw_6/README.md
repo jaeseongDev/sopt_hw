@@ -1,5 +1,6 @@
 # Project : 솝커툰
 2019년 SOPT 24기 합동 세미나 과제
+
 ![디자인 도안](./public/images/design.png)
 
 ## 목표
