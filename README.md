@@ -1,7 +1,7 @@
 # Project : 솝커툰
 2019년 SOPT 24기 합동 세미나 과제
 
-![디자인 도안](./public/images/design.png)
+![디자인 도안](./황보소연,박재성_hw_6/public/images/design.png)
 
 ## 목표
 '솝커툰'이라는 소규모 프로젝트에 대해, 클라이언트가 이용할 API를 제작
@@ -53,8 +53,8 @@
 
 
 ## DB ERD
-![DB ERD](./public/images/ERD.png)
+![DB ERD](./황보소연,박재성_hw_6/public/images/ERD.png)
 
 
 ## Swagger로 작성한 API 문서
-![Swagger API 문서](./public/images/swagger_api.png)
+![Swagger API 문서](./황보소연,박재성_hw_6/public/images/swagger_api.png)
