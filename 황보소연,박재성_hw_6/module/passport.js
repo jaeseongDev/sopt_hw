@@ -1,6 +1,7 @@
 module.exports = (passport) => {
     // Passport를 위한 모듈
     const LocalStrategy = require('passport-local').Strategy;
+    const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
     // DB 이용을 위한 모듈
     const pool = require('../config/dbConfig');
@@ -22,7 +23,7 @@ module.exports = (passport) => {
         async (userId, userPw, done) => {
             try {
                 var connection = await pool.getConnection();
-                let query = 'SELECT * FROM user WHERE userId = ?';
+                let query = 'SELECT user, userName, userId, loginProvider, snsId FROM user WHERE userId = ?';
                 const result = await connection.query(query, [userId]);
                 const user = result[0];
                 // userId, userPw 중 Null 값이 존재하는 경우
@@ -54,6 +55,32 @@ module.exports = (passport) => {
             }
         }
     ));
+
+    passport.use(new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:3000/api/auth/google/callback"
+    }, async (accessToken, refreshToken, profile, done) => {
+        try {
+            const {displayName, id} = profile;
+            var connection = await pool.getConnection();
+            
+            let query = 'SELECT * FROM user WHERE snsId = ?';
+            const result = await connection.query(query, [id]);
+            if (!result[0]) {
+                let query = "INSERT INTO user (userName, snsId, loginProvider) VALUES (?, ?, ?)"
+                await connection.query(query, [displayName, id, 'google']);    
+            }
+            const user = result[0];
+            done(null, user);
+        } catch (err) {
+            console.log(err);
+            done(err);
+        } finally {
+            connection.release();
+        }
+    }));
+
 
     // 로그인 요청이 들어왔을 때, user의 정보를 세션에 저장하는 역할 (로그인 요청이 들어왔을 때만 실행된다)
     passport.serializeUser(function (user, done) {

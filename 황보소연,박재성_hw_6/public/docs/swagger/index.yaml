@@ -10,8 +10,8 @@ info:
 # API 서버에 대한 정보
 servers:
   # - url: "http://13.209.206.99:3000/api"
-  # - url: "http//15.164.83.64:3000/api"
-  - url: "http://localhost:3000/api"
+  - url: "http//15.164.83.64:3000/api"
+  # - url: "http://localhost:3000/api"
     description: 솝커툰 API # 제공하는 API에 대한 설명
 
 tags:
