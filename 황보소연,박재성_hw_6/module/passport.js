@@ -96,7 +96,6 @@ module.exports = (passport) => {
             let query = 'SELECT * FROM user WHERE userIdx = ?';
             const result = await connection.query(query, [userIdx]);
             const user = result[0];
-            console.log('deserialize', user);
             done(null, user);
         } catch (err) {
             console.log(err);
